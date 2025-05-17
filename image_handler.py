@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 def capture_image(folder='static/images'):
-    capture = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
 
     if not cap.isOpened():
         raise RuntimeError("Webcam could not be opened.")
@@ -25,4 +25,4 @@ def capture_image(folder='static/images'):
     # Save the image
     cv2.imwrite(path, frame)
 
-    return path
+    return path 

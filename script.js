@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
+    let selectedFile = null;
     const uploadBtn = document.getElementById('uploadBtn');
     const previewContainer = document.getElementById('previewContainer');
     const previewImage = document.getElementById('previewImage');
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
     uploadBtn.addEventListener('click', () => fileInput.click());
     fileInput.addEventListener('change', handleFileSelect);
     processBtn.addEventListener('click', processGesture);
@@ -77,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleFile(file) {
+        selectedFile = file;  // 
+    
         const fileType = file.type.split('/')[0];
         
         if (fileType === 'image' || fileType === 'video') {
@@ -101,34 +105,76 @@ document.addEventListener('DOMContentLoaded', () => {
             showNotification('Please upload an image or video file', 'error');
         }
     }
+    
 
     // Process Gesture
     function processGesture() {
-        if (!previewImage.style.display && !previewVideo.style.display) {
-            showNotification('Please upload an image or video first', 'error');
+        if (!selectedFile) {
+            showNotification("Please upload an image first.", "error");
             return;
         }
-
+    
         loader.style.display = 'block';
         processBtn.disabled = true;
         processBtn.setAttribute('aria-busy', 'true');
+    
+        const reader = new FileReader();
+        reader.onload = function () {
+            const AZURE_ENDPOINT = "https://aslclassifierhackathon-prediction.cognitiveservices.azure.com/customvision/v3.0/Prediction/c8c0d0e7-6c14-404e-a0b5-ddec872274f1/classify/iterations/Iteration1/image";
+            const SUBSCRIPTION_KEY = "JmJ9xzhQKWlYCoffPQn7dBYgfuxcK3EE5OJAOsYqdsI9Qqqj4qBJJQQJ99BEAC8vTInXJ3w3AAAIACOGqyY6";
+    
+            fetch(AZURE_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/octet-stream',
+                    'Prediction-Key': SUBSCRIPTION_KEY
+                },
+                body: reader.result
+            })
+            .then(response => {
 
-        // Simulate AI processing
-        setTimeout(() => {
-            loader.style.display = 'none';
-            processBtn.disabled = false;
-            processBtn.setAttribute('aria-busy', 'false');
-            
-            // Mock results
-            const mockResults = {
-                sign: 'Turn on lights',
-                confidence: '95%',
-                command: 'ACTIVATE_LIGHTS'
-            };
-            
-            displayResults(mockResults);
-        }, 2000);
+                if (!response.ok) {
+                    throw new Error(`Azure response error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                loader.style.display = 'none';
+                processBtn.disabled = false;
+                processBtn.setAttribute('aria-busy', 'false');
+    
+                const predictions = data.predictions || [];
+                console.log(predictions)
+    
+                if (predictions.length === 0) {
+                    showNotification("No predictions returned from Azure.", "error");
+                    return;
+                }
+    
+                const best = predictions.reduce((a, b) => a.probability > b.probability ? a : b);
+    
+                const results = {
+                    sign: best.tagName,
+                    confidence: `${(best.probability * 100).toFixed(2)}%`,
+                    command: best.tagName.toUpperCase().replace(/\s+/g, '_')
+                };
+    
+                displayResults(results);
+            })
+            .catch(err => {
+                loader.style.display = 'none';
+                processBtn.disabled = false;
+                processBtn.setAttribute('aria-busy', 'false');
+                showNotification("Failed to analyze image with Azure.", "error");
+                console.error("Azure error:", err);
+            });
+        };
+    
+        reader.readAsArrayBuffer(selectedFile);
     }
+    
+
+    
 
     // Display Results
     function displayResults(results) {
