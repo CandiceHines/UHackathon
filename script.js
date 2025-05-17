@@ -153,10 +153,40 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 const best = predictions.reduce((a, b) => a.probability > b.probability ? a : b);
     
+
+                const commandMap = {
+                    'A': 'Turn on Light',
+                    'B': 'Turn off Light',
+                    'C': 'Close the Curtains',
+                    'D': 'Dim Living Room Lights',
+                    'E': 'Enable Energy Saver Mode',
+                    'F': 'Fan On Bedroom',
+                    'G': 'Good Morning Routine',
+                    'H': 'Heat Up the Room',
+                    'I': 'Initiate Indoor Cleaning',
+                    'J': 'Jazz Playlist On',
+                    'K': 'Kitchen Lights On',
+                    'L': 'Lock All Doors',
+                    'M': 'Movie Mode',
+                    'N': 'Night Mode Activated',
+                    'O': 'Open Garage Door',
+                    'P': 'Play Ambient Sounds',
+                    'Q': 'Quiet Mode (Mute All Devices)',
+                    'R': 'Rain Sounds On',
+                    'S': 'Start Coffee Machine',
+                    'T': 'Turn Off All Devices',
+                    'U': 'Unlock Front Door',
+                    'V': 'Vacuum Cleaning Start',
+                    'W': 'Wake-Up Alarm Set',
+                    'X': 'Exit Home Mode (Shut everything)',
+                    'Y': 'YouTube on Living Room TV',
+                    'Z': 'Dim Night Lamp'
+                }
+                
                 const results = {
                     sign: best.tagName,
                     confidence: `${(best.probability * 100).toFixed(2)}%`,
-                    command: best.tagName.toUpperCase().replace(/\s+/g, '_')
+                    command: commandMap[best.tagName]
                 };
     
                 displayResults(results);
