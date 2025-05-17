@@ -80,15 +80,19 @@ body {
 }
 
 .navbar {
-    background-color: var(--background-color);
+    background: transparent;
+    box-shadow: none;
+    border: none;
     padding: 1rem 2rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 1000;
+    color: #18181b;
+    text-shadow: 0 1px 0 #fff, 0 2px 8px rgba(30, 64, 175, 0.08);
+    animation: fadeInUp 0.6s ease forwards;
 }
 
 .logo {
@@ -98,6 +102,17 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    cursor: pointer;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.logo:active {
+    transform: scale(0.98);
 }
 
 .logo-icon {
@@ -108,28 +123,52 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
+    background: rgba(180, 210, 255, 0.32);
+    border-radius: 2rem;
+    box-shadow: 0 4px 32px 0 rgba(30, 64, 175, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1.5px solid rgba(180, 210, 255, 0.22);
 }
 
 .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     margin-bottom: 3rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border-radius: 1rem;
+    padding: 4.5rem 2rem 4rem 2rem;
+    border-radius: 2.5rem;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, #dbeafe 0%, #a5b4fc 60%, #f0f9ff 100%),
+        linear-gradient(135deg, #e0e7ff 0%, #f0f9ff 100%);
+    box-shadow: 0 8px 40px 0 rgba(30, 64, 175, 0.10), 0 1.5px 4px rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
 }
 
 .hero h1 {
-    font-size: 2.5rem;
-    color: var(--hero-title-color);
-    margin-bottom: 1rem;
-    line-height: 1.2;
+    font-family: 'Inter', 'Sora', 'Segoe UI', 'Arial', 'sans-serif';
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: #18181b;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 2px 12px rgba(30, 64, 175, 0.12), 0 1px 0 #fff;
+    animation: fadeInUp 0.8s ease forwards;
 }
 
 .hero p {
-    font-size: 1.2rem;
-    color: var(--light-text);
+    color: #23272f;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-shadow: 0 1px 0 #fff, 0 2px 8px rgba(30, 64, 175, 0.08);
     max-width: 800px;
     margin: 0 auto;
+    animation: fadeInUp 0.8s ease 0.2s forwards;
+    opacity: 0;
 }
 
 .features {
@@ -140,31 +179,165 @@ body {
 }
 
 .feature-card {
-    background: var(--card-background);
-    padding: 2rem;
-    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
     text-align: center;
-    transition: transform 0.2s ease;
-    border: 1px solid var(--border-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(31, 38, 135, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05) 25%,
+        rgba(255, 255, 255, 0) 50%
+    );
+    z-index: 1;
+    border-radius: 20px;
+    transition: opacity 0.3s ease;
+}
+
+.feature-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0) 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .feature-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 
+        0 15px 45px rgba(31, 38, 135, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.feature-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+.feature-card:hover::after {
+    opacity: 1;
+}
+
+.feature-card .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-block;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.2) translateZ(20px);
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
 }
 
 .feature-card h3 {
     color: var(--text-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: transform 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card:hover h3 {
+    transform: translateZ(15px);
 }
 
 .feature-card p {
     color: var(--light-text);
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease;
+    line-height: 1.6;
 }
+
+.feature-card:hover p {
+    transform: translateZ(10px);
+}
+
+/* Dark mode enhancements */
+[data-theme="dark"] .feature-card {
+    background: rgba(17, 25, 40, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+[data-theme="dark"] .feature-card::before {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.02) 25%,
+        rgba(255, 255, 255, 0) 50%
+    );
+}
+
+[data-theme="dark"] .feature-card:hover {
+    box-shadow: 
+        0 15px 45px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Add entrance animations */
+.feature-card:nth-child(1) { 
+    animation: fadeInLeft 0.6s ease 0.3s forwards;
+    transform: translateX(-50px);
+}
+.feature-card:nth-child(2) { 
+    animation: fadeInUp 0.6s ease 0.4s forwards;
+    transform: translateY(50px);
+}
+.feature-card:nth-child(3) { 
+    animation: fadeInRight 0.6s ease 0.5s forwards;
+    transform: translateX(50px);
+}
+
+/* Add floating animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.feature-card {
+    animation: float 6s ease-in-out infinite;
+}
+
+.feature-card:nth-child(1) { animation-delay: 0s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.4s; }
 
 .card {
     background: var(--card-background);
@@ -172,6 +345,8 @@ body {
     padding: 2rem;
     margin-bottom: 2rem;
     border: 1px solid var(--border-color);
+    opacity: 0;
+    animation: scaleIn 0.6s ease 0.6s forwards;
 }
 
 .card-title {
@@ -192,6 +367,8 @@ body {
     cursor: pointer;
     transition: border-color 0.2s ease;
     background-color: var(--background-color);
+    opacity: 0;
+    animation: scaleIn 0.6s ease 0.7s forwards;
 }
 
 .upload-area:hover {
@@ -279,6 +456,8 @@ body {
     overflow: hidden;
     outline: none;
     z-index: 1;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease 0.8s forwards;
 }
 
 .btn:before {
@@ -446,25 +625,9 @@ body {
     transition: all 0.3s ease;
 }
 
-.light-bulb {
-    width: 40px;
-    height: 40px;
-    background: #fbbf24;
-    border-radius: 50%;
-    top: 50px;
-    right: 50px;
-    opacity: 0.3;
-}
-
-.light-bulb.active {
-    opacity: 1;
-    box-shadow: 0 0 20px #fbbf24;
-}
-
 .door {
     width: 60px;
     height: 100px;
-    background: #4b5563;
     position: absolute;
     bottom: 0;
     right: 50px;
@@ -520,4 +683,277 @@ body {
     .card {
         break-inside: avoid;
     }
+}
+
+[data-theme="dark"] .hero {
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, #312e81 0%, #1e293b 60%, #18181b 100%),
+        linear-gradient(135deg, #1e293b 0%, #18181b 100%);
+    box-shadow: 0 8px 40px 0 rgba(124, 58, 237, 0.10), 0 1.5px 4px rgba(0,0,0,0.10);
+}
+
+[data-theme="dark"] .hero h1 {
+    color: #f3f4f6;
+    text-shadow: 0 2px 16px rgba(124, 58, 237, 0.18), 0 1px 0 #23272f;
+}
+
+[data-theme="dark"] .hero p {
+    color: #e0e7ef;
+    text-shadow: 0 1px 0 #23272f, 0 2px 8px rgba(124, 58, 237, 0.10);
+}
+
+[data-theme="dark"] .navbar, [data-theme="dark"] .navbar .logo {
+    color: #f3f4f6;
+    text-shadow: 0 1px 0 #23272f, 0 2px 8px rgba(124, 58, 237, 0.10);
+}
+
+html, body {
+    min-height: 100vh;
+    width: 100vw;
+    background:
+        radial-gradient(ellipse 120% 80% at 50% 20%, #dbeafe 0%, #a5b4fc 60%, #f0f9ff 100%),
+        linear-gradient(135deg, #e0e7ff 0%, #f0f9ff 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+[data-theme="dark"] html, [data-theme="dark"] body {
+    background:
+        radial-gradient(ellipse 120% 80% at 50% 20%, #312e81 0%, #1e293b 60%, #18181b 100%),
+        linear-gradient(135deg, #1e293b 0%, #18181b 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+[data-theme="dark"] .container {
+    background: rgba(49, 46, 129, 0.32);
+    border: 1.5px solid rgba(124, 58, 237, 0.18);
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 2rem 2.5rem;
+    border-radius: 1rem;
+    background: var(--card-background);
+    box-shadow: 0 8px 32px rgba(37,99,235,0.10), 0 2px 8px rgba(0,0,0,0.10);
+    z-index: 1000;
+    max-width: 480px;
+    min-width: 320px;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    border: 1.5px solid var(--primary-color);
+    color: var(--text-color);
+}
+
+.notification h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.notification ol, .notification ul {
+    margin-left: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.notification li {
+    margin-bottom: 0.5rem;
+}
+
+.notification p {
+    margin-bottom: 0.7rem;
+    color: var(--text-color);
+}
+
+.notification strong {
+    color: var(--primary-color);
+}
+
+.notification a {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.notification-close {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    background: none;
+    border: none;
+    font-size: 1.7rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    color: var(--light-text);
+    transition: color 0.2s ease;
+}
+
+.notification-close:hover {
+    color: var(--primary-color);
+}
+
+/* Dark theme specific notification styles */
+[data-theme="dark"] .notification {
+    background: var(--card-background);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .notification h2 {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .notification p,
+[data-theme="dark"] .notification li {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .notification strong {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .notification-close {
+    color: var(--light-text);
+}
+
+[data-theme="dark"] .notification-close:hover {
+    color: var(--primary-color);
 } 
+
+/* Add entrance animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Add animation classes */
+.animate-fade-up {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-fade-left {
+    opacity: 0;
+    animation: fadeInLeft 0.6s ease forwards;
+}
+
+.animate-fade-right {
+    opacity: 0;
+    animation: fadeInRight 0.6s ease forwards;
+}
+
+.animate-scale {
+    opacity: 0;
+    animation: scaleIn 0.6s ease forwards;
+}
+
+/* Add animation delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Add smooth page transition */
+.page-transition {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.page-transition.loaded {
+    opacity: 1;
+}
+
+/* Add hover animations */
+.feature-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-icon {
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+/* Add loading animation */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.loading {
+    background: linear-gradient(90deg, 
+        var(--card-background) 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        var(--card-background) 100%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+[data-theme="dark"] .feature-card {
+    background: rgba(17, 25, 40, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .feature-card::before {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
+}
+
+[data-theme="dark"] .feature-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
